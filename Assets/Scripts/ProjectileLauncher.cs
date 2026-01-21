@@ -89,12 +89,21 @@ public class ProjectileLauncher : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void PrimaryFireServerRpc(Vector3 spawnPos, Vector3 direction)
-    {     // Instanciar el proyectil real
-          GameObject projectileInstance = Instantiate(serverProjectilePrefab, spawnPos, Quaternion.identity);     
-          projectileInstance.transform.up = direction;      
-          // Notificar a todos los clientes
-          SpawnDummyProjectileClientRpc(spawnPos, direction); 
+    private void PrimaryFireServerRpc(Vector3 spawnPos, Vector3 direction, ServerRpcParams rpcParams = default)
+    {
+        GameObject projectileInstance = Instantiate(serverProjectilePrefab, spawnPos, Quaternion.identity);
+        projectileInstance.transform.up = direction;
+        if (projectileInstance.TryGetComponent<Rigidbody2D>(out var rb))
+        {
+            rb.linearVelocity = projectileInstance.transform.up * projectileSpeed;
+        }
+
+        if (projectileInstance.TryGetComponent<DealDamageOnContact>(out var dealDamage))
+        {
+            dealDamage.SetOwner(rpcParams.Receive.SenderClientId);
+        }
+
+        SpawnDummyProjectileClientRpc(spawnPos, direction);
     }
 
     [ClientRpc]
@@ -105,5 +114,3 @@ public class ProjectileLauncher : NetworkBehaviour
         // Evita crear doble proyectil en quien disparo
         SpawnDummyProjectile(spawnPos, direction); }
     }
-
-
