@@ -556,7 +556,7 @@ MonoBehaviour:
   clientProjectilePrefab: {fileID: 7869269200458910788, guid: 5a605e1cb905e3142b821efed5a88b9d, type: 3}
   projectileSpawnPoint: {fileID: 189382674358710734}
   inputReader: {fileID: 11400000, guid: 2153298c4d97da542a671eca20e9b9a6, type: 2}
-  projectileSpeed: 2
+  projectileSpeed: 10
   muzzleFlash: {fileID: 1777217400343961478}
   playerCollider: {fileID: 2834077219311555618}
   fireRate: 1
